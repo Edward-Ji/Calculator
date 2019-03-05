@@ -1,18 +1,21 @@
-<NumberBtn@Button>:
+<NumberBtn>:
     font_size: 35
     background_normal: ''
+    background_down: ''
     background_color: [0.3, 0.3, 0.3, 1]
     foreground_color: [1, 1, 1, 1]
 
-<SpecialBtn@Button>:
+<SpecialBtn>:
     font_size: 35
     background_normal: ''
+    background_down: ''
     background_color: [1, 0.6, 0, 0.9]
     foreground_color: [1, 1, 1, 1]
 
 <OperatorBtn>:
     font_size: 35
     background_normal: ''
+    background_down: ''
     background_color: [1, 0.6, 0, 0.9]
     foreground_color: [1, 1, 1, 1]
     group: "operators"
@@ -23,12 +26,11 @@
     clear_btn: _clear_btn
     orientation: "vertical"
     spacing: 5
-    size_hint: None, None
-    size: 350, 420
 
     BoxLayout:
         Label:
             id: _display
+            text: '0'
             font_size: 54
             halign: "right"
             multiline: False
@@ -42,7 +44,7 @@
         SpecialBtn:
             id: _clear_btn
             text: "AC"
-            size_hint_x: 50
+            size_hint_x: 51
             on_press: calculator.clear()
         NumberBtn:
             text: "%"
