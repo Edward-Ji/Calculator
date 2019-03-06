@@ -49,10 +49,14 @@ class OperatorBtn(ToggleButton):
 class CalcLayout(BoxLayout):
 
     error = False
+    end = False
     full_exp = []
+    last_ope = None
+    ans = ''
 
-    def true_exp(self):
-        exp = ''.join(self.full_exp) + self.display.text
+    def true_exp(self, exp=None):
+        if not exp:
+            exp = ''.join(self.full_exp) + self.display.text
         for pair in switch.items():
             exp = exp.replace(*pair)
         return exp
@@ -80,28 +84,42 @@ class CalcLayout(BoxLayout):
             self.display.text = ''
         self.clear_btn.text = 'C'
         operators = OperatorBtn.get_widgets("operators")
+        if self.end:
+            self.end = False
+            self.display.text = ''
         for operator_btn in operators:
             if operator_btn.state == "down":
                 operator_btn.state = "normal"
-                self.full_exp.append(self.display.text + operator_btn.text)
+                if self.last_ope and not self.full_exp:
+                    self.full_exp = [self.ans]
+                self.full_exp += (self.display.text, operator_btn.text)
                 self.display.text = ''
         else:
             self.display.text += char
 
     def calc(self):
-        if self.error:
+        if self.error or not self.full_exp:
             return
-        expression = self.true_exp()
-        if not expression:
-            return
+        if self.end and self.last_ope:
+            expression = self.true_exp(self.display.text + ''.join(self.last_ope))
+        else:
+            expression = self.true_exp()
+            try:
+                self.last_ope = (self.full_exp[-1], self.display.text)
+            except IndexError:
+                self.last_ope = None
+        print(self.full_exp, expression, self.last_ope)
         try:
             result = eval(expression)
             if result == int(result):
                 result = int(result)
             else:
                 result = round(result, 10)
-            self.display.text = str(result)
+            result = str(result)
+            self.ans = result
+            self.display.text = result
             self.full_exp = []
+            self.end = True
         except Exception as e:
             self.error = True
             self.clear_btn.text = "AC"
@@ -109,6 +127,7 @@ class CalcLayout(BoxLayout):
 
     def clear(self):
         self.display.text = '0'
+        self.ans = ''
         if self.clear_btn.text == "AC":
             self.full_exp = []
             self.error = False
