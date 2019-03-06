@@ -85,20 +85,21 @@ class CalcLayout(BoxLayout):
         self.clear_btn.text = 'C'
         operators = OperatorBtn.get_widgets("operators")
         if self.end:
-            self.end = False
             self.display.text = ''
         for operator_btn in operators:
             if operator_btn.state == "down":
                 operator_btn.state = "normal"
-                if self.last_ope and not self.full_exp:
+                if self.end:
                     self.full_exp = [self.ans]
                 self.full_exp += (self.display.text, operator_btn.text)
                 self.display.text = ''
         else:
             self.display.text += char
+        if self.end:
+            self.end = False
 
     def calc(self):
-        if self.error or not self.full_exp:
+        if self.error or not self.full_exp and not self.last_ope:
             return
         if self.end and self.last_ope:
             expression = self.true_exp(self.display.text + ''.join(self.last_ope))
@@ -129,6 +130,7 @@ class CalcLayout(BoxLayout):
         self.display.text = '0'
         self.ans = ''
         if self.clear_btn.text == "AC":
+            self.last_ope = None
             self.full_exp = []
             self.error = False
             operators = OperatorBtn.get_widgets("operators")
