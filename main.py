@@ -1,3 +1,11 @@
+"""
+This calculator is developed by Edward Ji.
+The first working version of this project is finished 6th of March, 2019.
+This calculator is built with the standard of universal basic calculator.
+This software could be regarded as a replica of the basic module in built-in MacOS calculator.
+Copyright Reserved 2019
+"""
+
 import kivy
 from kivy.app import App
 from kivy.uix.boxlayout import BoxLayout
@@ -49,10 +57,10 @@ class OperatorBtn(ToggleButton):
 class CalcLayout(BoxLayout):
 
     error = False
-    end = False
+    end = False  # indicator of whether a calculation has just been performed
     full_exp = []
-    last_ope = None
-    ans = ''
+    last_ope = None  # save the last operation for repetition
+    ans = ''  # save the answer from previous calculation
 
     def true_exp(self, exp=None):
         if not exp:
