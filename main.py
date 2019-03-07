@@ -18,8 +18,7 @@ Window.size = (350, 420)
 Window.minimum_width, Window.minimum_height = 350, 420
 
 switch = {'×': '*',
-          '÷': '/',
-          '%': "*0.01"}
+          '÷': '/'}
 
 
 class NumberBtn(Button):
@@ -75,6 +74,21 @@ class CalcLayout(BoxLayout):
         try:
             result = - eval(self.display.text)
             self.display.text = str(result)
+            if self.end:
+                self.ans = str(result)
+        except Exception as e:
+            self.error = True
+            self.clear_btn.text = "AC"
+            self.display.text = e.__class__.__name__
+
+    def percent(self):
+        if self.error or self.display.text == '0':
+            return
+        try:
+            result = eval(self.display.text) * 0.01
+            self.display.text = str(result)
+            if self.end:
+                self.ans = str(result)
         except Exception as e:
             self.error = True
             self.clear_btn.text = "AC"
